@@ -29,9 +29,9 @@ jobs:
       - name: Download imagebuilder
         working-directory: /mnt/workdir
         run: |
-          curl -O "https://downloads.openwrt.org/releases/22.03.4/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
-          tar xvaf openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
-          ln -sf /mnt/workdir/openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
+          curl -O "https://downloads.openwrt.org/releases/22.03.4/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
+          tar xvaf openwrt-imagebuilder-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
+          ln -sf /mnt/workdir/openwrt-imagebuilder-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
 
       - name: Download version info
         run: |
