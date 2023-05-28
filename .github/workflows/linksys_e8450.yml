@@ -1,0 +1,71 @@
+name: Linksys E8450 Openwrt buildroot
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  BOARD: "mediatek"
+  SUBTARGET: "mt7622"
+  PROFILE: "linksys_e8450-ubi"
+  PACKAGES: "base-files busybox ca-bundle dnsmasq dropbear fstools kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7615-firmware kmod-mt7615e kmod-mt7915e kmod-usb3 libc libgcc libustream-wolfssl logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe procd procd-seccomp procd-ujail uboot-envtools uci uclient-fetch urandom-seed urngd wpad-basic-wolfssl firewall ip6tables-legacy iptables-legacy kmod-ipt-offload"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo mkdir -p /mnt/workdir
+          sudo chown $USER:$GROUPS /mnt/workdir
+
+      - name: Download imagebuilder
+        working-directory: /mnt/workdir
+        run: |
+          curl -O "https://downloads.openwrt.org/22.03.4/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
+          tar xvaf openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
+          ln -sf /mnt/workdir/openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
+
+      - name: Download version info
+        run: |
+          curl -O "https://downloads.openwrt.org/22.03.4/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/version.buildinfo"
+          echo "OPENWRT_VERSION=$(cat version.buildinfo)" >> $GITHUB_ENV
+
+      - name: Build the image of type 1
+        id: type1
+        run: |
+          cd openwrt
+          make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES }}"
+          mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-${{ env.BOARD }}-${{ env.SUBTARGET }}-${{ env.PROFILE }}-squashfs-sysupgrade.itb ${{ env.PROFILE }}-squashfs-sysupgrade.itb
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.OPENWRT_VERSION }}
+          release_name: OpenWrt ${{ env.OPENWRT_VERSION }}
+          body: |
+            This release is based on OpenWrt snapshot ${{ env.OPENWRT_VERSION }} and built with these packages: "${{ env.PACKAGES }}"
+
+          draft: false
+          prerelease: false
+
+      - name: Upload type1 Asset
+        id: upload-release-asset-type1
+        uses: actions/upload-release-asset@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: openwrt/${{ env.PROFILE }}-squashfs-sysupgrade.itb
+          asset_name: ${{ env.PROFILE }}-squashfs-sysupgrade.itb
+          asset_content_type: application/bin
