@@ -11,10 +11,6 @@ env:
   PROFILE: "linksys_e8450-ubi"
   PACKAGES: "base-files busybox ca-bundle dnsmasq dropbear firewall4 fstools kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7615-firmware kmod-mt7615e kmod-mt7915e kmod-nft-offload kmod-usb3 libc libgcc libustream-wolfssl logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe procd procd-seccomp procd-ujail uboot-envtools uci uclient-fetch urandom-seed urngd wpad-basic-wolfssl"
 
-permissions:
-  actions: read
-  contents: read
-  security-events: write
 
 jobs:
   build:
