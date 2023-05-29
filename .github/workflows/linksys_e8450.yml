@@ -43,7 +43,7 @@ jobs:
         run: |
           cd openwrt
           make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES }}"
-          mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-${{ env.BOARD }}-${{ env.SUBTARGET }}-${{ env.PROFILE }}-squashfs-sysupgrade.itb ${{ env.PROFILE }}-squashfs-sysupgrade.itb
+          mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}-${{ env.PROFILE }}-squashfs-sysupgrade.itb ${{ env.PROFILE }}-squashfs-sysupgrade.itb
 
       - name: Create Release
         id: create_release
