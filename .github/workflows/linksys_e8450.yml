@@ -9,7 +9,7 @@ env:
   BOARD: "mediatek"
   SUBTARGET: "mt7622"
   PROFILE: "linksys_e8450-ubi"
-  PACKAGES: "base-files busybox ca-bundle dnsmasq dropbear fstools kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7615-firmware kmod-mt7615e kmod-mt7915e kmod-usb3 libc libgcc libustream-wolfssl logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe procd procd-seccomp procd-ujail uboot-envtools uci uclient-fetch urandom-seed urngd wpad-basic-wolfssl firewall ip6tables-legacy iptables-legacy kmod-ipt-offload"
+  PACKAGES: "base-files busybox ca-bundle dnsmasq dropbear firewall4 fstools kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7615-firmware kmod-mt7615e kmod-mt7915e kmod-nft-offload kmod-usb3 libc libgcc libustream-wolfssl logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe procd procd-seccomp procd-ujail uboot-envtools uci uclient-fetch urandom-seed urngd wpad-basic-wolfssl"
 
 jobs:
   build:
