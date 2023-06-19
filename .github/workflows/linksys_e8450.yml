@@ -29,13 +29,13 @@ jobs:
       - name: Download imagebuilder
         working-directory: /mnt/workdir
         run: |
-          curl -O "https://downloads.openwrt.org/releases/22.03.4/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
-          tar xvaf openwrt-imagebuilder-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
-          ln -sf /mnt/workdir/openwrt-imagebuilder-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
+          curl -O "https://downloads.openwrt.org/releases/22.03.5/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-22.03.5-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
+          tar xvaf openwrt-imagebuilder-22.03.5-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
+          ln -sf /mnt/workdir/openwrt-imagebuilder-22.03.5-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
 
       - name: Download version info
         run: |
-          curl -O "https://downloads.openwrt.org/releases/22.03.4/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/version.buildinfo"
+          curl -O "https://downloads.openwrt.org/releases/22.03.5/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/version.buildinfo"
           echo "OPENWRT_VERSION=$(cat version.buildinfo)" >> $GITHUB_ENV
 
       - name: Build the image of type 1
@@ -43,7 +43,7 @@ jobs:
         run: |
           cd openwrt
           make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES }}"
-          mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-22.03.4-${{ env.BOARD }}-${{ env.SUBTARGET }}-${{ env.PROFILE }}-squashfs-sysupgrade.itb ${{ env.PROFILE }}-squashfs-sysupgrade.itb
+          mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-22.03.5-${{ env.BOARD }}-${{ env.SUBTARGET }}-${{ env.PROFILE }}-squashfs-sysupgrade.itb ${{ env.PROFILE }}-squashfs-sysupgrade.itb
 
       - name: Create Release
         id: create_release
